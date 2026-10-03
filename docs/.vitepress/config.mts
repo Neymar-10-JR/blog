@@ -2,15 +2,19 @@ import { defineConfig } from 'vitepress'
 import MathJax3 from 'markdown-it-mathjax3'
 import { buildPostSidebar } from './utils/posts'
 
-// TODO: 部署到 Cloudflare Pages 后把这里换成真实域名（用于站点地图与 OG 标签）
-const hostname = 'https://gzh-blog.pages.dev'
+// 当前公网部署地址（用于站点地图与 OG 标签）
+// TODO: 换成自己的域名 / Cloudflare Pages 域名后，记得同步改这里
+const hostname = 'https://guozihui-tech-blog.app.workbuddy.host'
 
 export default defineConfig({
   lang: 'zh-CN',
   title: '郭子晖的技术博客',
   titleTemplate: ':title | 郭子晖',
   description: '后端工程、检索增强生成（RAG）与论文阅读笔记',
-  cleanUrls: true,
+  // 关闭 cleanUrls：改为生成 /tags/index.html 这类目录式路径，
+  // 任何静态服务器都能正确解析；开启 cleanUrls 需要服务端支持补 .html 后缀，
+  // 否则 /tags 会 404。
+  cleanUrls: false,
   lastUpdated: true,
   ignoreDeadLinks: true,
 
@@ -100,17 +104,17 @@ export default defineConfig({
     darkModeSwitchTitle: '切换到深色模式',
     externalLinkIcon: true,
 
-    // TODO: 部署后取消下面三行注释，并把 YOUR_NAME / YOUR_REPO 换成真实仓库，
-    // 即可在每篇文章底部显示「在 GitHub 上编辑此页」。
+    // TODO: 注释掉的部分是「编辑此页」，等博客仓库推到 GitHub 后启用，
+    // 把 my-blog 换成仓库名即可（例如 https://github.com/Neymar-10-JR/blog）
     // editLink: {
-    //   pattern: 'https://github.com/YOUR_NAME/YOUR_REPO/edit/main/docs/:path',
+    //   pattern: 'https://github.com/Neymar-10-JR/blog/edit/main/docs/:path',
     //   text: '在 GitHub 上编辑此页'
     // },
 
     socialLinks: [
-      // TODO: 换成你自己的链接
-      // { icon: 'github', link: 'https://github.com/YOUR_NAME' },
-      // { icon: { svg: '<svg .../>' }, link: 'https://scholar.google.com/citations?user=YOUR_ID', ariaLabel: 'Google Scholar' }
+      { icon: 'github', link: 'https://github.com/Neymar-10-JR' }
+      // TODO: 论文投稿后追加 Google Scholar 主页链接
+      // { icon: 'languages', link: 'https://scholar.google.com/citations?user=YOUR_ID', ariaLabel: 'Google Scholar' }
     ],
 
     footer: {

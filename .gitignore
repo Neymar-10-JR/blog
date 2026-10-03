@@ -6,6 +6,10 @@ docs/.vitepress/cache
 docs/.vitepress/dist
 docs/.vitepress/config.mts.timestamp-*.mjs
 
+# 二维码等本地临时文件
+qr-local-preview.png
+publish/
+
 # 本地环境变量
 .env
 .env.local

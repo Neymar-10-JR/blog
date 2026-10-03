@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "vitepress dev docs --port 5173",
     "build": "vitepress build docs",
-    "preview": "vitepress preview docs"
+    "preview": "vitepress preview docs",
+    "sync:publish": "npm run build && rm -rf publish && mkdir -p publish && cp -R docs/.vitepress/dist/. publish/"
   },
   "devDependencies": {
     "juice": "^12.2.0",
