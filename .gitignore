@@ -20,3 +20,7 @@ publish/
 .vscode/*
 !.vscode/extensions.json
 *.log
+
+# WorkBuddy 本地发布元数据与项目笔记（含本机路径 / app id，不入库）
+.wbapp_*.genie
+.workbuddy/
