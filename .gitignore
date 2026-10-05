@@ -7,7 +7,7 @@ docs/.vitepress/dist
 docs/.vitepress/config.mts.timestamp-*.mjs
 
 # 二维码等本地临时文件
-qr-local-preview.png
+qr-*.png
 publish/
 
 # 本地环境变量

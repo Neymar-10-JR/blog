@@ -2,7 +2,8 @@
 
 基于 **VitePress** 的零成本静态博客，Markdown 写作，`git push` 后自动上线。
 
-**当前线上地址**：https://guozihui-tech-blog.app.workbuddy.host/ （HTTPS，任何网络可访问）
+**当前线上地址**：https://neymar-10-jr.github.io/blog/ （GitHub Pages 官方域名，HTTPS 自动签发）
+**源码仓库**：https://github.com/Neymar-10-JR/blog
 
 ## 一、本地运行
 
@@ -74,22 +75,24 @@ git add . && git commit -m "add: 文章标题" && git push
 
 ## 四、部署上线
 
-本项目有两套部署方式，可以同时并存。
+### 4.1 GitHub Pages（当前启用）
 
-### 4.1 一键发布到分享链接（当前已启用）
+每次 `git push` 到 `main`，`.github/workflows/deploy-pages.yml` 会自动构建并发布到
+<https://neymar-10-jr.github.io/blog/>。
 
-已经关联好 `publish/` 目录，更新线上内容的流程是：
+首次需要一次性设置：仓库 **Settings → Pages → Source** 选 **GitHub Actions**。
 
-```bash
-npm run sync:publish   # 重新构建并把产物同步到 publish/ 目录
-```
+> 注意两处与子路径部署相关的配置，换域名时务必同步修改 `docs/.vitepress/config.mts`：
+> - `base`：部署在 `xxx.github.io/blog/` 这类子路径下时必须设为 `/blog/`，
+>   否则资源路径会指向域名根目录而全部 404。改用根域名时把它设为 `'/'`。
+> - `head` 里的 `href`（如 favicon）不会自动补 base，需手动用 `${base}` 拼接；
+>   自定义 Vue 组件内的链接要用 `withBase()` 包裹。
+> - `sitemap` 条目是 `/about.html` 这种根绝对路径，已用 `transformItems` 补上 base。
 
-执行后再走一次发布动作即可覆盖线上内容，链接保持不变。
-
-> 注意：`cleanUrls` 已设为 `false`，站内链接统一带 `.html` 后缀，
+> `cleanUrls` 设为 `false`，站内链接统一带 `.html` 后缀，
 > 这样任何静态服务器都能正确解析，不依赖服务端自动补后缀的能力。
 
-### 4.2 部署到 Cloudflare Pages（推荐作为长期方案）
+### 4.2 部署到 Cloudflare Pages（可选，用于换自定义域名）
 
 1. 在 GitHub 新建一个仓库（Public 或 Private 均可），把本目录推上去。
 2. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com) → **Workers & Pages** → **Create** → **Pages** → **Import an existing Git repository**。
@@ -110,12 +113,10 @@ npm run sync:publish   # 重新构建并把产物同步到 publish/ 目录
 
 上线前建议替换以下几处占位内容（搜 `TODO` 即可定位）：
 
-- `docs/about.md` 的邮箱与 Google Scholar 地址（GitHub 已填）
+- `docs/about.md` 的 Google Scholar 地址（GitHub 已填）
 - `docs/projects.md` 中 Ragent 部分你自己的改动与解决的问题
 - `docs/publications.md` 的论文条目、PDF / arXiv 链接与 BibTeX
-- `docs/.vitepress/config.mts` 中的 hostname（换域名后）与 Google Scholar 社交链接
-
-账号信息：GitHub 主页 <https://github.com/Neymar-10-JR>，后续推送仓库时用它作为 remote。
+- `docs/.vitepress/config.mts` 中换自定义域名时的 `base` 与 Google Scholar 社交链接
 
 ## 六、数学公式
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { withBase } from 'vitepress'
 import { data as posts } from '../posts.data'
 import type { Post } from '../posts.data'
 
@@ -30,7 +31,7 @@ const total = computed(() => posts.length)
     <section v-for="group in groups" :key="group.year" class="post-group">
       <h2 class="post-year">{{ group.year }}</h2>
       <article v-for="post in group.items" :key="post.url" class="post-card">
-        <a class="post-title" :href="post.url">
+        <a class="post-title" :href="withBase(post.url)">
           <span v-if="post.sticky" class="post-sticky">置顶</span>
           {{ post.title }}
         </a>
@@ -42,7 +43,7 @@ const total = computed(() => posts.length)
             v-for="tag in post.tags"
             :key="tag"
             class="post-tag"
-            :href="`/tags?tag=${encodeURIComponent(tag)}`"
+            :href="withBase(`/tags?tag=${encodeURIComponent(tag)}`)"
           >#{{ tag }}</a>
         </div>
       </article>

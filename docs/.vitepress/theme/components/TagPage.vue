@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { withBase } from 'vitepress'
 import { data as posts } from '../posts.data'
 import type { Post } from '../posts.data'
 
@@ -12,7 +13,10 @@ onMounted(() => {
 
 function toggle(tag: string) {
   selected.value = selected.value === tag ? '' : tag
-  const url = selected.value ? `/tags?tag=${encodeURIComponent(selected.value)}` : '/tags'
+  // withBase 保证部署在 /blog/ 这类子路径下时，地址栏 URL 依然正确
+  const url = selected.value
+    ? withBase(`/tags?tag=${encodeURIComponent(selected.value)}`)
+    : withBase('/tags')
   window.history.replaceState({}, '', url)
 }
 
@@ -61,7 +65,7 @@ const totalTags = computed(() => tagStats.value.length)
       </h2>
       <ul>
         <li v-for="post in filtered" :key="post.url" class="tag-result-item">
-          <a :href="post.url">{{ post.title }}</a>
+          <a :href="withBase(post.url)">{{ post.title }}</a>
           <time>{{ post.date }}</time>
         </li>
       </ul>

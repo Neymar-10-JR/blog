@@ -1,9 +1,8 @@
-# 可选：备用部署到 GitHub Pages
+# GitHub Pages 部署（已启用）
 #
-# 主方案是 Cloudflare Pages（关联仓库后自动构建，无需本文件）。
-# 如果你想同时保留 GitHub Pages 作为镜像站点：
-#   1) 仓库 Settings → Pages → Source 选择 "GitHub Actions"
-#   2) 把下面两个 job 里的 `if: false` 改成 `if: true`
+# 站点地址：https://neymar-10-jr.github.io/blog/
+# 前提：仓库 Settings → Pages → Source 需选择 "GitHub Actions"（只需设置一次）
+# 每次 push 到 main 会自动构建并上线。
 
 name: Deploy VitePress site to Pages
 
@@ -23,7 +22,7 @@ concurrency:
 
 jobs:
   build:
-    if: false
+    if: true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -51,7 +50,7 @@ jobs:
           path: docs/.vitepress/dist
 
   deploy:
-    if: false
+    if: true
     needs: build
     environment:
       name: github-pages

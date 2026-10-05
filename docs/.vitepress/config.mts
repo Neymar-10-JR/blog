@@ -2,12 +2,19 @@ import { defineConfig } from 'vitepress'
 import MathJax3 from 'markdown-it-mathjax3'
 import { buildPostSidebar } from './utils/posts'
 
-// 当前公网部署地址（用于站点地图与 OG 标签）
-// TODO: 换成自己的域名 / Cloudflare Pages 域名后，记得同步改这里
-const hostname = 'https://guozihui-tech-blog.app.workbuddy.host'
+// 部署基路径。部署到 GitHub Pages 的项目站点时，地址形如
+// https://neymar-10-jr.github.io/blog/ ，所以必须显式声明 base，
+// 否则构建出的资源路径会指向域名根目录而全部 404。
+// 换成自定义域名（如 https://guozihui.top/ ）后，把这里改成 '/'。
+const base = '/blog/'
+
+// 站点正式地址（用于站点地图与 OG 标签）
+const origin = 'https://neymar-10-jr.github.io'
 
 export default defineConfig({
   lang: 'zh-CN',
+  // GitHub Pages 项目站点部署在子路径下，base 必须与仓库名一致
+  base,
   title: '郭子晖的技术博客',
   titleTemplate: ':title | 郭子晖',
   description: '后端工程、检索增强生成（RAG）与论文阅读笔记',
@@ -19,16 +26,26 @@ export default defineConfig({
   ignoreDeadLinks: true,
 
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    // head 里的 href 不会自动补 base，需要手动拼接
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }],
     ['meta', { name: 'author', content: '郭子晖' }],
     ['meta', { name: 'keywords', content: '后端开发,RAG,Milvus,Spring Boot,Redis,人工智能,广州大学' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: '郭子晖的技术博客' }],
     ['meta', { property: 'og:description', content: '后端工程、检索增强生成（RAG）与论文阅读笔记' }],
-    ['meta', { property: 'og:url', content: hostname }]
+    ['meta', { property: 'og:url', content: `${origin}${base}` }]
   ],
 
-  sitemap: { hostname },
+  sitemap: {
+    hostname: origin,
+    // VitePress 生成的条目是 /about.html 这类根绝对路径，
+    // sitemap 库会据此解析到域名根目录，导致丢掉 /blog 前缀，故手动补上。
+    transformItems: (items) =>
+      items.map((item: { url: string }) => ({
+        ...item,
+        url: `${base}${String(item.url).replace(/^\//, '')}`
+      }))
+  },
 
   markdown: {
     lineNumbers: true,
@@ -104,12 +121,11 @@ export default defineConfig({
     darkModeSwitchTitle: '切换到深色模式',
     externalLinkIcon: true,
 
-    // TODO: 注释掉的部分是「编辑此页」，等博客仓库推到 GitHub 后启用，
-    // 把 my-blog 换成仓库名即可（例如 https://github.com/Neymar-10-JR/blog）
-    // editLink: {
-    //   pattern: 'https://github.com/Neymar-10-JR/blog/edit/main/docs/:path',
-    //   text: '在 GitHub 上编辑此页'
-    // },
+    // 文章底部显示「在 GitHub 上编辑此页」
+    editLink: {
+      pattern: 'https://github.com/Neymar-10-JR/blog/edit/main/docs/:path',
+      text: '在 GitHub 上编辑此页'
+    },
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/Neymar-10-JR' }

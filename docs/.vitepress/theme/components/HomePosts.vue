@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { withBase } from 'vitepress'
 import { data as posts } from '../posts.data'
 
 const limit = 5
@@ -9,7 +10,7 @@ const recent = computed(() => posts.slice(0, limit))
 <template>
   <div class="home-posts">
     <article v-for="post in recent" :key="post.url" class="home-post-card">
-      <a class="home-post-title" :href="post.url">
+      <a class="home-post-title" :href="withBase(post.url)">
         <span v-if="post.sticky" class="post-sticky">置顶</span>
         {{ post.title }}
       </a>
@@ -21,11 +22,11 @@ const recent = computed(() => posts.slice(0, limit))
           v-for="tag in post.tags"
           :key="tag"
           class="post-tag"
-          :href="`/tags?tag=${encodeURIComponent(tag)}`"
+          :href="withBase(`/tags?tag=${encodeURIComponent(tag)}`)"
         >#{{ tag }}</a>
       </div>
     </article>
 
-    <p class="home-post-more"><a href="/posts/">查看全部文章 →</a></p>
+    <p class="home-post-more"><a :href="withBase('/posts/')">查看全部文章 →</a></p>
   </div>
 </template>
